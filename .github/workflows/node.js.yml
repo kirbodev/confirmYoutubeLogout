@@ -31,7 +31,7 @@ jobs:
         run: pnpm build --targets="chrome-mv3,firefox-mv2"
 
       - name: Create releases
-        uses: actions/create-release@v4  # Create releases
+        uses: softprops/action-gh-release@v4  # Maintained release action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
