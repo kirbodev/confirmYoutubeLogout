@@ -1,0 +1,57 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # You can choose a different runner
+
+    steps:
+      - uses: actions/checkout@v4  # Checkout your code
+
+      - name: Use Node.js 20  # Adjust the version as needed
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm build --targets="chrome-mv3,firefox-mv2"
+
+      - name: Create releases
+        uses: actions/create-release@v4  # Create releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}  # Use the pushed tag for release name
+
+      - uses: actions/upload-artifact@v3  # Upload build artifacts
+        with:
+          name: build
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3  # Download artifacts
+        with:
+          name: build
+
+      - run: |  # Extract and upload versions
+          shopt -s nullglob  # Allow processing empty directories
+          for version in chrome-mv3 firefox-mv2; do
+            if [[ -d "build/$version" ]]; then
+              tag_name="${GITHUB_REF##*/}-$version"  # Extract version from tag
+              zip -r "$tag_name.zip" "build/$version"
+              gh release create -t "$tag_name" -n "Release $tag_name" ./"$tag_name.zip"
+            fi
+          done
