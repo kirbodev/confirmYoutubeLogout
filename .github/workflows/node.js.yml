@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -36,15 +34,14 @@ jobs:
         run: |
           version=$(jq -r '.version' package.json)
           echo "Extracted version: $version"  # Optional for logging
-          # Set output for next job
-          echo "::set-output name=version::$version"
+          echo "::set-env name=VERSION::$version"
 
       - name: Create releases
         uses: softprops/action-gh-release@v2  # Maintained release action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: "release-${{ jobs.extract-version.outputs.version }}"  # Use the pushed tag for release name
+          tag_name: "release-${{ env.VERSION }}"  # Use the pushed tag for release name
 
       - uses: actions/upload-artifact@v3  # Upload build artifacts
         with:
