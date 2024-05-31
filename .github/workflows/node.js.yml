@@ -42,11 +42,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: "release-$version"  # Use the pushed tag for release name
+          tag_name: "release-${version}"  # Use the pushed tag for release name
 
       - uses: actions/upload-artifact@v3  # Upload build artifacts
         with:
           name: build
+          path: "build"
 
       - name: Download build artifacts
         uses: actions/download-artifact@v3  # Download artifacts
