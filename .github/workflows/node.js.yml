@@ -32,12 +32,17 @@ jobs:
       - name: Build project
         run: pnpm build --targets="chrome-mv3,firefox-mv2"
 
+      - name: Extract version from package.json
+        run: |
+          version=$(jq -r '.version' package.json)
+          echo "Extracted version: $version"  # Optional for logging
+
       - name: Create releases
         uses: softprops/action-gh-release@v2  # Maintained release action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: ${{ github.ref##*/ }}  # Use the pushed tag for release name
+          tag_name: "release-$version"  # Use the pushed tag for release name
 
       - uses: actions/upload-artifact@v3  # Upload build artifacts
         with:
