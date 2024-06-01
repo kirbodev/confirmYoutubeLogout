@@ -30,10 +30,10 @@ jobs:
         run: pnpm install
 
       - name: Build project
-        run: pnpm build --targets="chrome-mv3,firefox-mv2"
+        run: pnpm build
 
-      - name: Test ls
-        run: ls -a
+      - name: Package to zip
+        run: pnpm package
 
       - name: Create releases
         uses: softprops/action-gh-release@v2  # Maintained release action
@@ -42,24 +42,5 @@ jobs:
         with:
           tag_name: "test"
           files: |
+            build/chrome-mv3-prod.zip
             LICENSE
-
-      - uses: actions/upload-artifact@v3  # Upload build artifacts
-        with:
-          name: build
-          path: "build"
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3  # Download artifacts
-        with:
-          name: build
-
-      - run: |  # Extract and upload versions
-          shopt -s nullglob  # Allow processing empty directories
-          for version in chrome-mv3 firefox-mv2; do
-            if [[ -d "build/$version" ]]; then
-              tag_name="${GITHUB_REF##*/}-$version"  # Extract version from tag
-              zip -r "$tag_name.zip" "build/$version"
-              gh release create -t "$tag_name" -n "Release $tag_name" ./"$tag_name.zip"
-            fi
-          done
