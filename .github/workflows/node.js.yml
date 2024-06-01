@@ -6,6 +6,8 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
+    # tags:
+    #   - "v*"
 
 jobs:
   build:
@@ -15,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4  # Checkout your code
 
       - name: Use Node.js 20  # Adjust the version as needed
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -37,6 +39,10 @@ jobs:
         uses: softprops/action-gh-release@v2  # Maintained release action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: "test"
+          files: |
+            LICENSE
 
       - uses: actions/upload-artifact@v3  # Upload build artifacts
         with:
