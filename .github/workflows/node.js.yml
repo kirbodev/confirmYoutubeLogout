@@ -34,14 +34,14 @@ jobs:
         run: |
           version=$(jq -r '.version' package.json)
           echo "Extracted version: $version"  # Optional for logging
-          echo "::set-env name=VERSION::$version"
+          echo "VERSION=$version" >> "$GITHUB_ENV"
 
       - name: Create releases
         uses: softprops/action-gh-release@v2  # Maintained release action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: "release-${{ env.VERSION }}"  # Use the pushed tag for release name
+          tag_name: "release-$VERSION  # Use the pushed tag for release name
 
       - uses: actions/upload-artifact@v3  # Upload build artifacts
         with:
