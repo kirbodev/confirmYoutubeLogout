@@ -41,7 +41,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: "release-$VERSION  # Use the pushed tag for release name
+          tag_name: "release-$VERSION"  # Use the pushed tag for release name
 
       - uses: actions/upload-artifact@v3  # Upload build artifacts
         with:
