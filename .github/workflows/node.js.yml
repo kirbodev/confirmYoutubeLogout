@@ -36,6 +36,10 @@ jobs:
           echo "Extracted version: $version"  # Optional for logging
           echo "VERSION=$version" >> "$GITHUB_ENV"
 
+      - name: Test version env
+        run: |
+          printf '%s\n' "$VERSION"
+
       - name: Create releases
         uses: softprops/action-gh-release@v2  # Maintained release action
         env:
