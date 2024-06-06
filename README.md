@@ -58,7 +58,11 @@ You can [download](https://github.com/kirbodev/confirmYoutubeLogout/archive/refs
 
 ### Extension Stores
 
-**Coming Soon**
+Chrome Webstore - [here](https://chromewebstore.google.com/detail/confirmyoutubelogout/fjjmhgfaemlolclnjbnmdldomjlgoheg)
+
+Edge Store - [here](https://microsoftedge.microsoft.com/addons/detail/confirmyoutubelogout/ffgfpeedjhiamboklaoakphhdcomcikl)
+
+Mozilla Addons (Firefox) - [here](https://addons.mozilla.org/en-GB/firefox/addon/confirmyoutubelogout/)
 
 ## Credits
 
